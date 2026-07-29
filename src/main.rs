@@ -86,4 +86,11 @@ mod tests {
             "Die Mitte sollte beim Erstellen noch leer (Hintergrund) sein"
         );
     }
+
+    #[test]
+    fn test_initialisierung_dimensionen_groesse_4() {
+        let canvas = SierpinskiCanvas::new(4);
+        assert_eq!(canvas.grid.len(), 4, "Höhe bei Größe 4 muss 4 sein");
+        assert_eq!(canvas.grid[0].len(), 7, "Breite bei Größe 4 muss 7 sein");
+    }
 }
