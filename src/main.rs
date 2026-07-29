@@ -31,8 +31,15 @@ impl SierpinskiCanvas {
 
     pub fn zeichne_rekursiv(&mut self, x: usize, y: usize, groesse: usize) {
         if groesse == 1 {
-            self.grid[x][y] = CanvasPixel::Fraktal;
+            self.grid[y][x] = CanvasPixel::Fraktal;
+            return;
         }
+
+        let halb = groesse / 2;
+
+        self.zeichne_rekursiv(x, y, halb);
+        self.zeichne_rekursiv(x - halb, y + halb, halb);
+        self.zeichne_rekursiv(x + halb, y + halb, halb);
     }
 }
 
