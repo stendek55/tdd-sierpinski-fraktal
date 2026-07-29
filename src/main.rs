@@ -96,7 +96,8 @@ mod tests {
 
     #[test]
     fn test_groesse_2_obere_spitze() {
-        let canvas = SierpinskiCanvas::new(2);
+        let mut canvas = SierpinskiCanvas::new(2);
+        canvas.zeichne_rekursiv(1, 0, 2);
         assert_eq!(
             canvas.grid[0][1],
             CanvasPixel::Fraktal,
@@ -116,7 +117,8 @@ mod tests {
 
     #[test]
     fn test_groesse_2_untere_basis() {
-        let canvas = SierpinskiCanvas::new(2);
+        let mut canvas = SierpinskiCanvas::new(2);
+        canvas.zeichne_rekursiv(1, 0, 2);
         assert_eq!(
             canvas.grid[1][1],
             CanvasPixel::Hintergrund,
