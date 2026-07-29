@@ -41,6 +41,22 @@ impl SierpinskiCanvas {
         self.zeichne_rekursiv(x - halb, y + halb, halb);
         self.zeichne_rekursiv(x + halb, y + halb, halb);
     }
+
+    pub fn darstellen(&self) {
+        //vim liste sonderzeichen :digraphs
+        //einfügen -> Strg+k -> vim-kürzel
+        //し ぱ ₈ ∴ ⅔ 2 ◎ ●
+        for zeile in &self.grid {
+            for pixel in zeile {
+                let zeichen = match pixel {
+                    CanvasPixel::Fraktal => "∴",
+                    CanvasPixel::Hintergrund => " ",
+                };
+                print!("{}", zeichen);
+            }
+            println!();
+        }
+    }
 }
 
 // ============================================================================
@@ -48,6 +64,10 @@ impl SierpinskiCanvas {
 // ============================================================================
 fn main() {
     println!("TDDprojekt - SIERPINSKI-FRAKTAL");
+    //grösse mus quadratisch sein
+    let mut canvas = SierpinskiCanvas::new(16);
+    canvas.zeichne_rekursiv(15, 0, 16);
+    canvas.darstellen();
 }
 
 // ============================================================================
