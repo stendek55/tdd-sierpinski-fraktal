@@ -93,4 +93,44 @@ mod tests {
         assert_eq!(canvas.grid.len(), 4, "Höhe bei Größe 4 muss 4 sein");
         assert_eq!(canvas.grid[0].len(), 7, "Breite bei Größe 4 muss 7 sein");
     }
+
+    #[test]
+    fn test_groesse_2_obere_spitze() {
+        let canvas = SierpinskiCanvas::new(2);
+        assert_eq!(
+            canvas.grid[0][1],
+            CanvasPixel::Fraktal,
+            "Oben muss eine Spitze sein"
+        );
+        assert_eq!(
+            canvas.grid[0][0],
+            CanvasPixel::Hintergrund,
+            "Neben Spitze muss leer sein"
+        );
+        assert_eq!(
+            canvas.grid[0][2],
+            CanvasPixel::Hintergrund,
+            "Neben Spitze muss leer sein"
+        );
+    }
+
+    #[test]
+    fn test_groesse_2_untere_basis() {
+        let canvas = SierpinskiCanvas::new(2);
+        assert_eq!(
+            canvas.grid[1][1],
+            CanvasPixel::Hintergrund,
+            "Die Mitte der Basis muss leer sein"
+        );
+        assert_eq!(
+            canvas.grid[1][0],
+            CanvasPixel::Fraktal,
+            "Untere linke Ecke muss besetzt sein"
+        );
+        assert_eq!(
+            canvas.grid[1][2],
+            CanvasPixel::Fraktal,
+            "Untere rechte Ecke muss besetzt sein"
+        );
+    }
 }
