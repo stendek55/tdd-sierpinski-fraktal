@@ -24,7 +24,11 @@ impl SierpinskiCanvas {
         }
     }
 
-    pub fn zeichne_rekursiv(&mut self, _x: i32, _y: i32, _groesse: i32) {}
+    pub fn zeichne_rekursiv(&mut self, x: usize, y: usize, groesse: usize) {
+        if groesse == 1 {
+            self.grid[x][y] = CanvasPixel::Fraktal;
+        }
+    }
 }
 
 // ============================================================================
