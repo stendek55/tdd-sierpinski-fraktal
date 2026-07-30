@@ -2,7 +2,7 @@
 // ===============================  TYPEN  ====================================
 // ============================================================================
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum CanvasPixel {
     Hintergrund,
     Fraktal,
@@ -18,10 +18,15 @@ pub struct SierpinskiCanvas {
 
 impl SierpinskiCanvas {
     /// Erstellt ein minimales 1x1 Feld, damit der erste Test funktioniert
-    pub fn new() -> Self {
-        SierpinskiCanvas {
-            grid: vec![vec![CanvasPixel::Hintergrund]],
-        }
+    pub fn new(groesse: usize) -> Self {
+        //breite aus grösse berechnen
+        let berechnete_breite = (groesse * 2) - 1;
+
+        //2-D spielfeld Erstellen
+        //inneres vec! -> erstellt eine zeile mit richtiger breite
+        //äußeres vec! -> kopiert diese zeile genauso oft wie die höhe bzw groesse ist
+        let tabelle = vec![vec![CanvasPixel::Hintergrund; berechnete_breite]; groesse];
+        SierpinskiCanvas { grid: tabelle }
     }
 
     pub fn zeichne_rekursiv(&mut self, x: usize, y: usize, groesse: usize) {
@@ -48,7 +53,7 @@ mod tests {
     #[test]
     fn test_groesse_1_zeichnet_ein_einzelnes_zeichen() {
         // Erstelle das leere Feld
-        let mut canvas = SierpinskiCanvas::new();
+        let mut canvas = SierpinskiCanvas::new(1);
 
         // Rufe die Zeichenfunktion auf
         canvas.zeichne_rekursiv(0, 0, 1);
