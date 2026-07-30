@@ -60,4 +60,25 @@ mod tests {
             "Bei Größe 1 muss das Pixel zu Fraktal werden!"
         );
     }
+    #[test]
+    fn test_initialisierung_groesse_2() {
+        let canvas = SierpinskiCanvas::new(2);
+
+        assert_eq!(
+            canvas.grid.len(),
+            2,
+            "Das Grid muss exakt 2 Zeilen hoch sein"
+        );
+        assert_eq!(
+            canvas.grid[0].len(),
+            3,
+            "Das Grid muss exakt 3 Spalten breit sein"
+        );
+
+        assert_eq!(
+            canvas.grid[0][1],
+            CanvasPixel::Hintergrund,
+            "Die Mitte sollte beim Erstellen noch leer (Hintergrund) sein"
+        );
+    }
 }
