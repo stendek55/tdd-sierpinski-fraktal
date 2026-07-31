@@ -162,4 +162,22 @@ mod tests {
             "Untere rechte Ecke muss besetzt sein"
         );
     }
+
+    #[test]
+    //test ohne asserts -> mit dieser flag wird ein panic-wurf erwartet zum bestehen
+    //panic-wurf muss diese nachricht enthalten
+    //(damit nicht ausversehen ein anderes panic den test bestehen lässt)
+    #[should_panic(expected = "Groesse muss zweierpotenz sein!")]
+    fn test_werfe_panic_bei_ungueltiger_groesse_keine_2erpotenz() {
+        let _canvas = SierpinskiCanvas::new(8);
+    }
+
+    #[test]
+    //test ohne asserts -> mit dieser flag wird ein panic-wurf erwartet zum bestehen
+    //panic-wurf muss diese nachricht enthalten
+    //(damit nicht ausversehen ein anderes panic den test bestehen lässt)
+    #[should_panic(expected = "Groesse muss groesser als 0 sein!")]
+    fn test_werfe_panic_bei_groesse_0() {
+        let _canvas = SierpinskiCanvas::new(0);
+    }
 }
