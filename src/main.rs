@@ -2,7 +2,7 @@
 // ===============================  TYPEN  ====================================
 // ============================================================================
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum CanvasPixel {
     Hintergrund,
     Fraktal,
@@ -190,5 +190,42 @@ mod tests {
     #[should_panic(expected = "Groesse muss groesser als 0 sein!")]
     fn test_werfe_panic_bei_groesse_0() {
         let _canvas = SierpinskiCanvas::new(0);
+    }
+
+    #[test]
+    fn test_anzahl_von_gesetzten_fraktalen_bei_groesse_4_und_64() {
+        //ein echtes sierpinski-fraktal hat immer die selbe anzahl von gesetzten minifraktalen
+        //bei größe 4 sind es 9 und bei größe 64 sind es 729
+        //MATHEMATIK -> größe muss zweierpotenz sein und minis ergeben sich aus dreierpotenz bei
+        //gleichem exponent
+        //größe =  4=2² -> minifraktale = 3²=9
+        //größe = 64=2⁶ -> minifraktale = 3⁶=729
+        let mut canvas_4 = SierpinskiCanvas::new(4);
+        let mut canvas_64 = SierpinskiCanvas::new(64);
+        canvas_4.zeichne_rekursiv(3, 0, 4);
+        canvas_64.zeichne_rekursiv(63, 0, 64);
+
+        let minis_4_anzahl = canvas_4
+            .grid //nimm das grid
+            .iter() //gehe über die elemenete
+            .flatten() //macht aus verschachtelung eine ebene
+            .filter(|&&mf| mf == CanvasPixel::Fraktal) //filtert nur gesetzte fraktale
+            .count(); //zählt das ergebnis
+
+        let minis_64_anzahl = canvas_64
+            .grid
+            .iter()
+            .flatten()
+            .filter(|&&mf| mf == CanvasPixel::Fraktal)
+            .count();
+
+        assert_eq!(
+            minis_4_anzahl, 9,
+            "Bei größe 4 müssen 9 Minifraktale entstehen"
+        );
+        assert_eq!(
+            minis_64_anzahl, 729,
+            "Bei größe 64 müssen 729 Minifraktale entstehen"
+        );
     }
 }
