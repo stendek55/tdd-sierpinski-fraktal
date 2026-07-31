@@ -72,9 +72,12 @@ impl SierpinskiCanvas {
 // ============================================================================
 fn main() {
     println!("TDDprojekt - SIERPINSKI-FRAKTAL");
-    //grösse mus quadratisch sein
-    let mut canvas = SierpinskiCanvas::new(16);
-    canvas.zeichne_rekursiv(15, 0, 16);
+    //grösse mus zweierpotenz sein
+    let groesse = 32;
+    let iks = groesse - 1;
+    let yps = 0;
+    let mut canvas = SierpinskiCanvas::new(groesse);
+    canvas.zeichne_rekursiv(iks, yps, groesse);
     canvas.darstellen();
 }
 
