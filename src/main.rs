@@ -228,4 +228,26 @@ mod tests {
             "Bei größe 64 müssen 729 Minifraktale entstehen"
         );
     }
+
+    #[test]
+    fn test_totale_anzahl_von_elementen_bei_groesse_128() {
+        let mut canvas = SierpinskiCanvas::new(128);
+        canvas.zeichne_rekursiv(127, 0, 128);
+
+        //diese formel errechnet die gesamtzahl aller elemente vom dreieck
+        let elemente_3eck = (128 * 129) / 2;
+        //filtert und zählt die erstellten dreieckselemente
+        let sum_alles_3eck = canvas
+            .grid
+            .iter()
+            .flatten()
+            .filter(|&&el| el == CanvasPixel::Hintergrund || el == CanvasPixel::Fraktal)
+            .count();
+
+        assert_eq!(
+            sum_alles_3eck, elemente_3eck,
+            "Bei größe 128 muss das Dreieck aus insgesamt {} Elementen bestehen (lebende und tote)",
+            elemente_3eck
+        );
+    }
 }
