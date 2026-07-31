@@ -19,6 +19,14 @@ pub struct SierpinskiCanvas {
 impl SierpinskiCanvas {
     /// Erstellt ein minimales 1x1 Feld, damit der erste Test funktioniert
     pub fn new(groesse: usize) -> Self {
+        //falsche groessen abfangen
+        if groesse == 0 {
+            panic!("Groesse muss groesser als 0 sein!");
+        }
+        if !groesse.is_power_of_two() {
+            panic!("Groesse muss zweierpotenz sein!");
+        }
+
         //breite aus grösse berechnen
         let berechnete_breite = (groesse * 2) - 1;
 
@@ -169,7 +177,7 @@ mod tests {
     //(damit nicht ausversehen ein anderes panic den test bestehen lässt)
     #[should_panic(expected = "Groesse muss zweierpotenz sein!")]
     fn test_werfe_panic_bei_ungueltiger_groesse_keine_2erpotenz() {
-        let _canvas = SierpinskiCanvas::new(8);
+        let _canvas = SierpinskiCanvas::new(7);
     }
 
     #[test]
