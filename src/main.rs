@@ -6,6 +6,7 @@
 pub enum CanvasPixel {
     Hintergrund,
     Fraktal,
+    Ausserhalb,
 }
 
 pub struct SierpinskiCanvas {
@@ -17,7 +18,6 @@ pub struct SierpinskiCanvas {
 // ============================================================================
 
 impl SierpinskiCanvas {
-    /// Erstellt ein minimales 1x1 Feld, damit der erste Test funktioniert
     pub fn new(groesse: usize) -> Self {
         //falsche groessen abfangen
         if groesse == 0 {
@@ -33,21 +33,42 @@ impl SierpinskiCanvas {
         //2-D spielfeld Erstellen
         //inneres vec! -> erstellt eine zeile mit richtiger breite
         //äußeres vec! -> kopiert diese zeile genauso oft wie die höhe bzw groesse ist
-        let tabelle = vec![vec![CanvasPixel::Hintergrund; berechnete_breite]; groesse];
+        let tabelle = vec![vec![CanvasPixel::Ausserhalb; berechnete_breite]; groesse];
         SierpinskiCanvas { grid: tabelle }
     }
 
     pub fn zeichne_rekursiv(&mut self, x: usize, y: usize, groesse: usize) {
+        //wenn dreieck auf kleinstmögliche einheit (1 pixel) geschrumpt ist
+        //wird fraktal gesetzt und beendet
         if groesse == 1 {
             self.grid[y][x] = CanvasPixel::Fraktal;
             return;
         }
 
+        //dimension halbieren um dreieck in drei kleinere unterdreiecke zu zerlegen
         let halb = groesse / 2;
 
-        self.zeichne_rekursiv(x, y, halb);
-        self.zeichne_rekursiv(x - halb, y + halb, halb);
-        self.zeichne_rekursiv(x + halb, y + halb, halb);
+        //zeichne rekursiv die 3 teil-dreiecke
+        self.zeichne_rekursiv(x, y, halb); //oben
+        self.zeichne_rekursiv(x - halb, y + halb, halb); //unten links
+        self.zeichne_rekursiv(x + halb, y + halb, halb); //unten rechts
+
+        //das negativ loch in der mitte ausstanzen
+        //das loch beginnt genau in vertikaler mitte (y + halb) und ist halb hoch
+        for i in 0..halb {
+            let zeile_y = y + halb + i;
+
+            //das umgekehrte dreieck ist oben (bei i = 0) am breitesten
+            //läuft nach unten spitz zu -> i zieht mit jeder zeile breite ab
+            let breite = halb - 1 - i;
+            let start_x = x - breite; //linke grenze loch
+            let end_x = x + breite; //rechte grenze loch
+
+            //zeile für zeile den bereich füllen
+            for zeile_x in start_x..=end_x {
+                self.grid[zeile_y][zeile_x] = CanvasPixel::Hintergrund;
+            }
+        }
     }
 
     pub fn darstellen(&self) {
@@ -57,8 +78,9 @@ impl SierpinskiCanvas {
         for zeile in &self.grid {
             for pixel in zeile {
                 let zeichen = match pixel {
-                    CanvasPixel::Fraktal => "∴",
+                    CanvasPixel::Fraktal => "▲",
                     CanvasPixel::Hintergrund => " ",
+                    CanvasPixel::Ausserhalb => "☆",
                 };
                 print!("{}", zeichen);
             }
@@ -120,8 +142,8 @@ mod tests {
 
         assert_eq!(
             canvas.grid[0][1],
-            CanvasPixel::Hintergrund,
-            "Die Mitte sollte beim Erstellen noch leer (Hintergrund) sein"
+            CanvasPixel::Ausserhalb,
+            "Die Mitte sollte beim Erstellen noch leer (Ausserhalb) sein"
         );
     }
 
@@ -143,12 +165,12 @@ mod tests {
         );
         assert_eq!(
             canvas.grid[0][0],
-            CanvasPixel::Hintergrund,
+            CanvasPixel::Ausserhalb,
             "Neben Spitze muss leer sein"
         );
         assert_eq!(
             canvas.grid[0][2],
-            CanvasPixel::Hintergrund,
+            CanvasPixel::Ausserhalb,
             "Neben Spitze muss leer sein"
         );
     }
