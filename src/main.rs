@@ -276,4 +276,33 @@ mod tests {
             elemente_3eck
         );
     }
+
+    #[test]
+    fn test_offset_berechnung_und_zeichnung() {
+        //dreieck soll um 5 nach rechts und 2 nach unten verschoben werden
+        let offset_x = 5;
+        let offset_y = 2;
+        let groesse = 4;
+
+        let mut canvas = SierpinskiCanvas::new(groesse, offset_x, offset_y);
+
+        //berechnung des verschobenen startpunkts
+        let start_x = (groesse - 1) + offset_x;
+        let start_y = offset_y;
+        canvas.zeichne_rekursiv(start_x, start_y, groesse);
+
+        //befindet sich die spitze wirklich an neuer verschobener koordinate?
+        assert_eq!(
+            canvas.grid[start_y][start_x],
+            CanvasPixel::Fraktal,
+            "Spitze (Fraktal) muss an offset-Koordinate sein!"
+        );
+
+        //ist im offsetraum vor dem sierpinskidreieck unberührte aussenwelt
+        assert_eq!(
+            canvas.grid[0][0],
+            CanvasPixel::Ausserhalb,
+            "Der Bereich vor dem Offset darf nicht als Fraktal bzw Hintergrund gesetzt sein!"
+        );
+    }
 }
