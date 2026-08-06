@@ -18,7 +18,7 @@ pub struct SierpinskiCanvas {
 // ============================================================================
 
 impl SierpinskiCanvas {
-    pub fn new(groesse: usize) -> Self {
+    pub fn new(groesse: usize, x_versatz: usize, y_versatz: usize) -> Self {
         //falsche groessen abfangen
         if groesse == 0 {
             panic!("Groesse muss groesser als 0 sein!");
@@ -27,13 +27,18 @@ impl SierpinskiCanvas {
             panic!("Groesse muss zweierpotenz sein!");
         }
 
-        //breite aus grösse berechnen
-        let berechnete_breite = (groesse * 2) - 1;
+        //mindestmaße fürs dreieck
+        let breite_3eck = (groesse * 2) - 1;
+        let hoehe_3eck = groesse;
+
+        //gesamtgröße des grids inklusive versatz
+        let breite_gesamt = breite_3eck + x_versatz;
+        let hoehe_gesamt = hoehe_3eck + y_versatz;
 
         //2-D spielfeld Erstellen
         //inneres vec! -> erstellt eine zeile mit richtiger breite
         //äußeres vec! -> kopiert diese zeile genauso oft wie die höhe bzw groesse ist
-        let tabelle = vec![vec![CanvasPixel::Ausserhalb; berechnete_breite]; groesse];
+        let tabelle = vec![vec![CanvasPixel::Ausserhalb; breite_gesamt]; hoehe_gesamt];
         SierpinskiCanvas { grid: tabelle }
     }
 
@@ -96,10 +101,12 @@ fn main() {
     println!("TDDprojekt - SIERPINSKI-FRAKTAL");
     //grösse mus zweierpotenz sein
     let groesse = 32;
+    let x_offset = 8;
+    let y_offset = 5;
     let iks = groesse - 1;
     let yps = 0;
-    let mut canvas = SierpinskiCanvas::new(groesse);
-    canvas.zeichne_rekursiv(iks, yps, groesse);
+    let mut canvas = SierpinskiCanvas::new(groesse, x_offset, y_offset);
+    canvas.zeichne_rekursiv(iks + x_offset, yps + y_offset, groesse);
     canvas.darstellen();
 }
 
@@ -113,7 +120,7 @@ mod tests {
     #[test]
     fn test_groesse_1_zeichnet_ein_einzelnes_zeichen() {
         // Erstelle das leere Feld
-        let mut canvas = SierpinskiCanvas::new(1);
+        let mut canvas = SierpinskiCanvas::new(1, 0, 0);
 
         // Rufe die Zeichenfunktion auf
         canvas.zeichne_rekursiv(0, 0, 1);
@@ -127,7 +134,7 @@ mod tests {
     }
     #[test]
     fn test_initialisierung_groesse_2() {
-        let canvas = SierpinskiCanvas::new(2);
+        let canvas = SierpinskiCanvas::new(2, 0, 0);
 
         assert_eq!(
             canvas.grid.len(),
@@ -149,14 +156,14 @@ mod tests {
 
     #[test]
     fn test_initialisierung_dimensionen_groesse_4() {
-        let canvas = SierpinskiCanvas::new(4);
+        let canvas = SierpinskiCanvas::new(4, 0, 0);
         assert_eq!(canvas.grid.len(), 4, "Höhe bei Größe 4 muss 4 sein");
         assert_eq!(canvas.grid[0].len(), 7, "Breite bei Größe 4 muss 7 sein");
     }
 
     #[test]
     fn test_groesse_2_obere_spitze() {
-        let mut canvas = SierpinskiCanvas::new(2);
+        let mut canvas = SierpinskiCanvas::new(2, 0, 0);
         canvas.zeichne_rekursiv(1, 0, 2);
         assert_eq!(
             canvas.grid[0][1],
@@ -177,7 +184,7 @@ mod tests {
 
     #[test]
     fn test_groesse_2_untere_basis() {
-        let mut canvas = SierpinskiCanvas::new(2);
+        let mut canvas = SierpinskiCanvas::new(2, 0, 0);
         canvas.zeichne_rekursiv(1, 0, 2);
         assert_eq!(
             canvas.grid[1][1],
@@ -202,7 +209,7 @@ mod tests {
     //(damit nicht ausversehen ein anderes panic den test bestehen lässt)
     #[should_panic(expected = "Groesse muss zweierpotenz sein!")]
     fn test_werfe_panic_bei_ungueltiger_groesse_keine_2erpotenz() {
-        let _canvas = SierpinskiCanvas::new(7);
+        let _canvas = SierpinskiCanvas::new(7, 0, 0);
     }
 
     #[test]
@@ -211,7 +218,7 @@ mod tests {
     //(damit nicht ausversehen ein anderes panic den test bestehen lässt)
     #[should_panic(expected = "Groesse muss groesser als 0 sein!")]
     fn test_werfe_panic_bei_groesse_0() {
-        let _canvas = SierpinskiCanvas::new(0);
+        let _canvas = SierpinskiCanvas::new(0, 0, 0);
     }
 
     #[test]
@@ -222,8 +229,8 @@ mod tests {
         //gleichem exponent
         //größe =  4=2² -> minifraktale = 3²=9
         //größe = 64=2⁶ -> minifraktale = 3⁶=729
-        let mut canvas_4 = SierpinskiCanvas::new(4);
-        let mut canvas_64 = SierpinskiCanvas::new(64);
+        let mut canvas_4 = SierpinskiCanvas::new(4, 0, 0);
+        let mut canvas_64 = SierpinskiCanvas::new(64, 0, 0);
         canvas_4.zeichne_rekursiv(3, 0, 4);
         canvas_64.zeichne_rekursiv(63, 0, 64);
 
@@ -253,7 +260,7 @@ mod tests {
 
     #[test]
     fn test_totale_anzahl_von_elementen_bei_groesse_128() {
-        let mut canvas = SierpinskiCanvas::new(128);
+        let mut canvas = SierpinskiCanvas::new(128, 0, 0);
         canvas.zeichne_rekursiv(127, 0, 128);
 
         //visuelle darstellung eines dreiecks mit grösse = 3 = höhe im grid(array)
