@@ -79,7 +79,7 @@ impl SierpinskiCanvas {
             for pixel in zeile {
                 let zeichen = match pixel {
                     CanvasPixel::Fraktal => "▲",
-                    CanvasPixel::Hintergrund => " ",
+                    CanvasPixel::Hintergrund => ".",
                     CanvasPixel::Ausserhalb => "☆",
                 };
                 print!("{}", zeichen);
@@ -256,8 +256,12 @@ mod tests {
         let mut canvas = SierpinskiCanvas::new(128);
         canvas.zeichne_rekursiv(127, 0, 128);
 
-        //diese formel errechnet die gesamtzahl aller elemente vom dreieck
-        let elemente_3eck = (128 * 129) / 2;
+        //visuelle darstellung eines dreiecks mit grösse = 3 = höhe im grid(array)
+        //...0... -> bau aus dreieck ein quadrat -> ..408..
+        //..123.. ->                             -> ..123..
+        //.45678. ->                             -> ..567..
+        //summe aller elemente vom dreieck ist somit das quadrat der höhe
+        let elemente_3eck = 128 * 128;
         //filtert und zählt die erstellten dreieckselemente
         let sum_alles_3eck = canvas
             .grid
