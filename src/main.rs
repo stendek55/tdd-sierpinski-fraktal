@@ -32,8 +32,8 @@ impl SierpinskiCanvas {
         let hoehe_3eck = groesse;
 
         //gesamtgröße des grids inklusive versatz
-        let breite_gesamt = breite_3eck + x_versatz;
-        let hoehe_gesamt = hoehe_3eck + y_versatz;
+        let breite_gesamt = breite_3eck + 2 * (x_versatz);
+        let hoehe_gesamt = hoehe_3eck + 2 * (y_versatz);
 
         //2-D spielfeld Erstellen
         //inneres vec! -> erstellt eine zeile mit richtiger breite
