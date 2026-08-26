@@ -100,9 +100,9 @@ impl SierpinskiCanvas {
 fn main() {
     println!("TDDprojekt - SIERPINSKI-FRAKTAL");
     //grösse mus zweierpotenz sein
-    let groesse = 32;
-    let x_offset = 8;
-    let y_offset = 5;
+    let groesse = 8;
+    let x_offset = 4;
+    let y_offset = 2;
     let iks = groesse - 1;
     let yps = 0;
     let mut canvas = SierpinskiCanvas::new(groesse, x_offset, y_offset);
