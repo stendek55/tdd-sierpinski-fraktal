@@ -19,24 +19,17 @@ Das Projekt berechnet die fraktalen Strukturen rekursiv auf einem zweidimensiona
 
 Wenn du das Programm ausführst, wird das Fraktal mit wunderschönen Unicode-Zeichen direkt in dein Terminal gezeichnet:
 
-```text
-
-☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
-☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
-☆☆☆☆☆☆☆☆☆☆☆▲☆☆☆☆☆☆☆☆☆☆☆
-☆☆☆☆☆☆☆☆☆☆▲.▲☆☆☆☆☆☆☆☆☆☆
-☆☆☆☆☆☆☆☆☆▲...▲☆☆☆☆☆☆☆☆☆
-☆☆☆☆☆☆☆☆▲.▲.▲.▲☆☆☆☆☆☆☆☆
-☆☆☆☆☆☆☆▲.......▲☆☆☆☆☆☆☆
-☆☆☆☆☆☆▲.▲.....▲.▲☆☆☆☆☆☆
-☆☆☆☆☆▲...▲...▲...▲☆☆☆☆☆
-☆☆☆☆▲.▲.▲.▲.▲.▲.▲.▲☆☆☆☆
-☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
-☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
-
-
+```rust
+// diese werte wurden in der main dafür gesetzt
+let groesse  = 8; // entspricht der Höhe bzw Anzahl der Etagen des Dreiecks
+let x_offset = 4; // Außenabstand links/rechts
+let y_offset = 2; // Außenabstand oben/unten
 ```
+
+![Sierpinski Konsole Vorschau](sierpi_3eck.png)
+
 *(Legende: `▲` = Fraktal, `.` = Innerer Hintergrund, `☆` = Äußerer Versatzbereich)*
+
 
 ---
 
@@ -77,12 +70,6 @@ Das Grid arbeitet nicht mit einfachen Booleans, sondern mit einem aussagekräfti
 Die Funktion `zeichne_rekursiv` teilt das Dreieck bei jedem Schritt in drei kleinere Unterdreiecke (oben, unten links, unten rechts). 
 
 Sobald die minimale Größe von `1` erreicht ist, wird das Pixel gesetzt. Auf dem Rückweg der Rekursion stanzt eine `for`-Schleife das umgekehrte "Negativ-Loch" präzise aus der Mitte des aktuellen Teilbereichs heraus:
-```rust
-// Mathematische Berechnung des spitz zulaufenden inneren Lochs
-let breite = halb - 1 - i;
-let start_x = x - breite;
-let end_x = x + breite;
-```
 
 ### 3. Mathematische Absicherung im Test-Modul
 Die Tests garantieren die mathematische Korrektheit des Fraktals (z.B. dass sich die Anzahl der gesetzten Mini-Fraktale streng nach der Formel 3^n verhält, wenn die Größe eine Zweierpotenz 2^n ist).
