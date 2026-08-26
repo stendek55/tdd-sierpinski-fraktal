@@ -75,6 +75,29 @@ Sobald die minimale Größe von `1` erreicht ist, wird das Pixel gesetzt. Auf de
 Die Tests garantieren die mathematische Korrektheit des Fraktals (z.B. dass sich die Anzahl der gesetzten Mini-Fraktale streng nach der Formel 3^n verhält, wenn die Größe eine Zweierpotenz 2^n ist).
 
 ---
+## Effektives Arbeiten & Tipps
+
+Ich Arbeite auf der Konsole mit **tmux** um mehrere Fenster gleichzeitig offen zu haben und zwischen diesen schnell springen zu können.  
+
+3 offene Fenster:
+* nvim: zum schreiben von Code
+* cargo: zum Ausführen von Code
+* git: zur Code-Verwaltung  
+
+Über plugins kann man sich in **nvim** eine gute Intellisence bauen. Außerdem sollte man **cargo-watch** installieren, dadurch wird bei jedem speichern der Code compiliert und ausgeführt.
+
+```bash
+# bei jedem speichern wird das Fraktal neu gezeichnet
+cargo watch -x run
+
+# beim speichern wird die Test-Suite sofort automatisch durchlaufen
+cargo watch -x test
+
+# beim speichern werden erst die Tests geprüft
+# wenn alle Tests Grün sind wird das Fraktal gezeichnet
+cargo watch -x test -x run
+```
+---
 
 ## 📄 Lizenz
 
