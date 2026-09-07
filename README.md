@@ -1,4 +1,4 @@
-# 🌀 TDD Sierpinski-Fraktal
+# TDD Sierpinski-Fraktal
 
 Ein in **Rust** implementierter, testgetriebener Generator für das Sierpinski-Dreieck im Terminal. 
 
@@ -6,7 +6,7 @@ Das Projekt berechnet die fraktalen Strukturen rekursiv auf einem zweidimensiona
 
 ---
 
-## 🚀 Features
+## Features
 
 * **TDD-Ansatz:** Vollständig testgetrieben entwickelt (`#[cfg(test)]` sichert die mathematischen Randfälle ab).
 * **Robuste Validierung:** Das Programm fängt fehlerhafte Eingaben ab und erzwingt via `panic!`, dass die Basisgröße eine Zweierpotenz (z.B. 2, 4, 8, 16, 32...) und größer als 0 ist.
@@ -15,7 +15,7 @@ Das Projekt berechnet die fraktalen Strukturen rekursiv auf einem zweidimensiona
 
 ---
 
-## 📊 Terminal-Vorschau
+## Terminal-Vorschau
 
 Wenn du das Programm ausführst, wird das Fraktal mit wunderschönen Unicode-Zeichen direkt in dein Terminal gezeichnet:
 
@@ -30,10 +30,9 @@ let y_offset = 2; // Außenabstand oben/unten
 
 *(Legende: `▲` = Fraktal, `.` = Innerer Hintergrund, `☆` = Äußerer Versatzbereich)*
 
-
 ---
 
-## 🛠️ Installation & Ausführung
+## Installation & Ausführung
 
 Stelle sicher, dass du die aktuelle [Rust-Toolchain](https://www.rust-lang.org/) installiert hast.
 
@@ -56,7 +55,7 @@ cargo test
 
 ---
 
-## 📐 Funktionsweise & Code-Struktur
+## Funktionsweise & Code-Struktur
 
 Der Kern des Programms teilt sich in drei logische Bereiche:
 
@@ -98,7 +97,3 @@ cargo watch -x test
 cargo watch -x test -x run
 ```
 ---
-
-## 📄 Lizenz
-
-Dieses Projekt ist unter der MIT-Lizenz lizenziert – siehe die [LICENSE](LICENSE)-Datei für Details.
