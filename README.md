@@ -1,3 +1,8 @@
+---
+---
+# ........ eigenständiges übungsprojekt ........
+---
+---
 # TDD Sierpinski-Fraktal
 
 Ein in **Rust** implementierter, testgetriebener Generator für das Sierpinski-Dreieck im Terminal. 
