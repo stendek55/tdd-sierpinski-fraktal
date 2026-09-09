@@ -1,9 +1,8 @@
+use minifb::{Key, Window, WindowOptions};
+use std::io;
 // ============================================================================
 // ===============================  TYPEN  ====================================
 // ============================================================================
-
-use std::io;
-
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum CanvasPixel {
     Hintergrund,
@@ -78,20 +77,43 @@ impl SierpinskiCanvas {
         }
     }
 
-    pub fn darstellen(&self) {
-        //vim liste sonderzeichen :digraphs
-        //einfügen -> Strg+k -> vim-kürzel
-        //し ぱ ₈ ∴ ⅔ 2 ◎ ●
-        for zeile in &self.grid {
-            for pixel in zeile {
-                let zeichen = match pixel {
-                    CanvasPixel::Fraktal => "▲",
-                    CanvasPixel::Hintergrund => ".",
-                    CanvasPixel::Ausserhalb => "☆",
-                };
-                print!("{}", zeichen);
+    pub fn darstellen(&self, im_fenster: bool) {
+        //welche ausgabeform
+        if !im_fenster {
+            //in konsole mit zeichen
+            //vim liste sonderzeichen :digraphs
+            //einfügen -> Strg+k -> vim-kürzel
+            //し ぱ ₈ ∴ ⅔ 2 ◎ ●
+            for zeile in &self.grid {
+                for pixel in zeile {
+                    let zeichen = match pixel {
+                        CanvasPixel::Fraktal => "▲",
+                        CanvasPixel::Hintergrund => ".",
+                        CanvasPixel::Ausserhalb => "☆",
+                    };
+                    print!("{}", zeichen);
+                }
+                println!();
             }
-            println!();
+        } else {
+            //als pixel im fenster
+
+            let size = 123;
+            // eindimensionales array (Buffer) für alle pixel erstellen -> alles schwarz = 0
+            let mut buffer: Vec<u32> = vec![0; size * size];
+
+            // nur funktionstest: weisser pixel genau in mitte einfärben
+            let mitte = (size / 2) * size + (size / 2);
+            buffer[mitte] = 0x00FFFFFF; // = weiss
+
+            // das eigentliche fenster erstellen
+            let mut window =
+                Window::new("Sierpinski-3ECK", size, size, WindowOptions::default()).unwrap();
+
+            // fenster offen halten -> bis ESC gedrückt wird
+            while window.is_open() && !window.is_key_down(Key::Escape) {
+                window.update_with_buffer(&buffer, size, size).unwrap();
+            }
         }
     }
 }
@@ -103,17 +125,26 @@ fn main() {
     println!("TDDprojekt - SIERPINSKI-FRAKTAL");
     println!("Größe eingeben -> muss Zweierpotenz sein (2, 4, 8, 16, ...):");
 
+    //grösse abfragen -> muss zweierpotenz sein
     let mut eingabe = String::new();
     let _ = io::stdin().read_line(&mut eingabe);
-    //grösse mus zweierpotenz sein
     let groesse: usize = eingabe.trim().parse().expect("soll usize");
+
+    //modus zur darstellung abfragen
+    println!("Darstellung Ausgeben als Zeichen auf [K]onsole oder mit Pixeln im [F]enster?");
+    let mut ausgabe = String::new();
+    let _ = io::stdin().read_line(&mut ausgabe);
+    // wird direkt als bool gespeichert um dann die entsprechende variante zu wählen
+    let als_pixel = ausgabe.trim().to_uppercase() == "F";
+
     let x_offset = 4;
     let y_offset = 2;
     let iks = groesse - 1;
     let yps = 0;
     let mut canvas = SierpinskiCanvas::new(groesse, x_offset, y_offset);
     canvas.zeichne_rekursiv(iks + x_offset, yps + y_offset, groesse);
-    canvas.darstellen();
+    // darstellungsmodus wird als parameter übergeben
+    canvas.darstellen(als_pixel);
 }
 
 // ============================================================================
