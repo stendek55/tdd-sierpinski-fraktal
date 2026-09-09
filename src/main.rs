@@ -77,43 +77,42 @@ impl SierpinskiCanvas {
         }
     }
 
-    pub fn darstellen(&self, im_fenster: bool) {
-        //welche ausgabeform
-        if !im_fenster {
-            //in konsole mit zeichen
-            //vim liste sonderzeichen :digraphs
-            //einfügen -> Strg+k -> vim-kürzel
-            //し ぱ ₈ ∴ ⅔ 2 ◎ ●
-            for zeile in &self.grid {
-                for pixel in zeile {
-                    let zeichen = match pixel {
-                        CanvasPixel::Fraktal => "▲",
-                        CanvasPixel::Hintergrund => ".",
-                        CanvasPixel::Ausserhalb => "☆",
-                    };
-                    print!("{}", zeichen);
-                }
-                println!();
+    pub fn darstellen_chars(&self) {
+        //in konsole mit zeichen
+        //vim liste sonderzeichen :digraphs
+        //einfügen -> Strg+k -> vim-kürzel
+        //し ぱ ₈ ∴ ⅔ 2 ◎ ●
+        for zeile in &self.grid {
+            for pixel in zeile {
+                let zeichen = match pixel {
+                    CanvasPixel::Fraktal => "▲",
+                    CanvasPixel::Hintergrund => ".",
+                    CanvasPixel::Ausserhalb => "☆",
+                };
+                print!("{}", zeichen);
             }
-        } else {
-            //als pixel im fenster
+            println!();
+        }
+    }
 
-            let size = 123;
-            // eindimensionales array (Buffer) für alle pixel erstellen -> alles schwarz = 0
-            let mut buffer: Vec<u32> = vec![0; size * size];
+    pub fn darstellen_pixels(&self) {
+        //als pixel im fenster
 
-            // nur funktionstest: weisser pixel genau in mitte einfärben
-            let mitte = (size / 2) * size + (size / 2);
-            buffer[mitte] = 0x00FFFFFF; // = weiss
+        let size = 123;
+        // eindimensionales array (Buffer) für alle pixel erstellen -> alles schwarz = 0
+        let mut buffer: Vec<u32> = vec![0; size * size];
 
-            // das eigentliche fenster erstellen
-            let mut window =
-                Window::new("Sierpinski-3ECK", size, size, WindowOptions::default()).unwrap();
+        // nur funktionstest: weisser pixel genau in mitte einfärben
+        let mitte = (size / 2) * size + (size / 2);
+        buffer[mitte] = 0x00FFFFFF; // = weiss
 
-            // fenster offen halten -> bis ESC gedrückt wird
-            while window.is_open() && !window.is_key_down(Key::Escape) {
-                window.update_with_buffer(&buffer, size, size).unwrap();
-            }
+        // das eigentliche fenster erstellen
+        let mut window =
+            Window::new("Sierpinski-3ECK", size, size, WindowOptions::default()).unwrap();
+
+        // fenster offen halten -> bis ESC gedrückt wird
+        while window.is_open() && !window.is_key_down(Key::Escape) {
+            window.update_with_buffer(&buffer, size, size).unwrap();
         }
     }
 }
@@ -143,8 +142,12 @@ fn main() {
     let yps = 0;
     let mut canvas = SierpinskiCanvas::new(groesse, x_offset, y_offset);
     canvas.zeichne_rekursiv(iks + x_offset, yps + y_offset, groesse);
-    // darstellungsmodus wird als parameter übergeben
-    canvas.darstellen(als_pixel);
+
+    if als_pixel {
+        canvas.darstellen_pixels();
+    } else {
+        canvas.darstellen_chars();
+    }
 }
 
 // ============================================================================
