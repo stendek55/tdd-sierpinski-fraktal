@@ -98,7 +98,11 @@ cargo watch -x run
 cargo watch -x test
 
 # beim speichern werden erst die Tests geprüft
+
 # wenn alle Tests Grün sind wird das Fraktal gezeichnet
 cargo watch -x test -x run
 ```
 ---
+
+## Hinweis zu meinen Commits
+***Meine Commit-History ist am Anfang etwas verdreht. Da ich das Repository zu Beginn auf einem USB-Stick gehalten hatte, um an verschiedenen Arbeitsplätzen daran entwickeln zu können. Dabei habe ich nicht bemerkt, dass an einer Maschine die Systemzeit unkorrekt war, dadurch ist die Reihenfolge leicht durcheinander. Wurde mir selbst erst offensichtlich als ich das lokale Repo auf GitHub geladen habe.***
