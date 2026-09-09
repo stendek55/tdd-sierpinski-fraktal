@@ -1,4 +1,5 @@
 use minifb::{Key, Window, WindowOptions};
+// use rand::{Rng, RngExt}; //für zufällige farbgestaltungen
 use std::io;
 // ============================================================================
 // ===============================  TYPEN  ====================================
@@ -77,8 +78,8 @@ impl SierpinskiCanvas {
         }
     }
 
+    //in konsole mit zeichen
     pub fn darstellen_chars(&self) {
-        //in konsole mit zeichen
         //vim liste sonderzeichen :digraphs
         //einfügen -> Strg+k -> vim-kürzel
         //し ぱ ₈ ∴ ⅔ 2 ◎ ●
@@ -95,24 +96,33 @@ impl SierpinskiCanvas {
         }
     }
 
+    //als pixel im fenster
     pub fn darstellen_pixels(&self) {
-        //als pixel im fenster
+        let hoehe = self.grid.len();
+        let breite = self.grid[0].len();
 
-        let size = 123;
         // eindimensionales array (Buffer) für alle pixel erstellen -> alles schwarz = 0
-        let mut buffer: Vec<u32> = vec![0; size * size];
+        let mut buffer: Vec<u32> = vec![0; breite * hoehe];
 
-        // nur funktionstest: weisser pixel genau in mitte einfärben
-        let mitte = (size / 2) * size + (size / 2);
-        buffer[mitte] = 0x00FFFFFF; // = weiss
+        // übersetzte das grid in farben
+        for y in 0..hoehe {
+            for x in 0..breite {
+                let farbe = match self.grid[y][x] {
+                    CanvasPixel::Fraktal => 0x00FFA500,     //orange
+                    CanvasPixel::Hintergrund => 0x004A6B53, //pastell-dunkelgrün
+                    CanvasPixel::Ausserhalb => 0x00333333,  //dunkelgrau
+                };
+                buffer[y * breite + x] = farbe;
+            }
+        }
 
         // das eigentliche fenster erstellen
         let mut window =
-            Window::new("Sierpinski-3ECK", size, size, WindowOptions::default()).unwrap();
+            Window::new("Sierpinski-3ECK", breite, hoehe, WindowOptions::default()).unwrap();
 
         // fenster offen halten -> bis ESC gedrückt wird
         while window.is_open() && !window.is_key_down(Key::Escape) {
-            window.update_with_buffer(&buffer, size, size).unwrap();
+            window.update_with_buffer(&buffer, breite, hoehe).unwrap();
         }
     }
 }
@@ -136,8 +146,8 @@ fn main() {
     // wird direkt als bool gespeichert um dann die entsprechende variante zu wählen
     let als_pixel = ausgabe.trim().to_uppercase() == "F";
 
-    let x_offset = 4;
-    let y_offset = 2;
+    let x_offset = 23;
+    let y_offset = 23;
     let iks = groesse - 1;
     let yps = 0;
     let mut canvas = SierpinskiCanvas::new(groesse, x_offset, y_offset);
