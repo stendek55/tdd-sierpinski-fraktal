@@ -2,6 +2,8 @@
 // ===============================  TYPEN  ====================================
 // ============================================================================
 
+use std::io;
+
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum CanvasPixel {
     Hintergrund,
@@ -99,8 +101,12 @@ impl SierpinskiCanvas {
 // ============================================================================
 fn main() {
     println!("TDDprojekt - SIERPINSKI-FRAKTAL");
+    println!("Größe eingeben -> muss Zweierpotenz sein (2, 4, 8, 16, ...):");
+
+    let mut eingabe = String::new();
+    let _ = io::stdin().read_line(&mut eingabe);
     //grösse mus zweierpotenz sein
-    let groesse = 8;
+    let groesse: usize = eingabe.trim().parse().expect("soll usize");
     let x_offset = 4;
     let y_offset = 2;
     let iks = groesse - 1;
