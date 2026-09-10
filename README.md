@@ -79,6 +79,35 @@ Sobald die minimale Größe von `1` erreicht ist, wird das Pixel gesetzt. Auf de
 Die Tests garantieren die mathematische Korrektheit des Fraktals (z.B. dass sich die Anzahl der gesetzten Mini-Fraktale streng nach der Formel 3^n verhält, wenn die Größe eine Zweierpotenz 2^n ist).
 
 ---
+## Erweiterung des Projektes - Darstellung in Pixeln 
+
+Das Programm generiert ein Sierpinski-Dreieck über ein softwarebasiertes Pixel-Rendering und stellt dieses in einem interaktiven Fenster mithilfe der `minifb`-Library dar. 
+
+Die Größe bzw. der Detailgrad (Rekursionstiefe / Anzahl der Iterationspunkte) kann nun direkt beim Starten des Programms vom Benutzer selbst festgelegt werden.
+
+### Benutzung & Parameter
+
+Beim Ausführen des Programms muss die gewünschte Dimension / Größe (zwingend eine zweierPotenz) angegeben werden.
+Danach erfolgt die Auswahl der Darstellungsform - entweder mit chars auf der Konsole oder einzelnen Pixeln in einem extra Fenster.
+
+```bash
+Größe eingeben -> muss Zweierpotenz sein (2, 4, 8, 16, ...):
+128
+Darstellung Ausgeben als Zeichen auf [K]onsole oder mit Pixeln im [F]enster?
+f
+```
+
+* **Pixelgenaues Zeichnen:** Das Fraktal wird mittels Rekursion berechnet und Pixel für Pixel direkt in den `minifb`-Framebuffer geschrieben.
+* **Dynamische Fensteranpassung:** Die Fenstergröße von `minifb` skaliert automatisch mit der vom Benutzer gewählten Dreiecksgröße.
+
+### Rendering-Beispiel
+
+So sieht die Ausgabe des pixelbasierten Sierpinski-Dreiecks in einem Standard-Anwendungsfenster mit Größe 128 aus:
+
+![Sierpinski PixelFenster Vorschau](sierp128.png)
+
+
+---
 ## Effektives Arbeiten & Tipps
 
 Ich Arbeite auf der Konsole mit **tmux** um mehrere Fenster gleichzeitig offen zu haben und zwischen diesen schnell springen zu können.  
